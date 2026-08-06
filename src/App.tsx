@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import type { Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import type { Certificate } from '@/types';
 import { buildVerifyUrl } from '@/lib/qr';
 import { generateQrDataUrl } from '@/lib/qr';
 import { extractCertificateFromPdf } from '@/lib/pdf';
 import ImsLogo from '@/components/ImsLogo';
+import Login from '@/components/Login';
 import {
   ShieldCheck,
   Plus,
@@ -30,6 +32,7 @@ import {
   IdCard,
   GraduationCap,
   ClipboardCheck,
+  LogOut,
 } from 'lucide-react';
 
 type View = 'dashboard' | 'verify';
@@ -37,6 +40,21 @@ type View = 'dashboard' | 'verify';
 export default function App() {
   const [view, setView] = useState<View>('dashboard');
   const [verifyId, setVerifyId] = useState<string | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [authReady, setAuthReady] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+      setAuthReady(true);
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     const handleHash = () => {
@@ -64,15 +82,32 @@ export default function App() {
   if (view === 'verify' && verifyId) {
     return <VerifyPage certificateId={verifyId} onBack={goDashboard} />;
   }
-  return <Dashboard />;
+
+  if (!authReady) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="w-8 h-8 border-3 border-slate-200 border-t-emerald-500 rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!session) {
+    return <Login />;
+  }
+
+  return <Dashboard session={session} />;
 }
 
-function Dashboard() {
+function Dashboard({ session }: { session: Session }) {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+  };
 
   const fetchCertificates = async () => {
     setLoading(true);
@@ -139,14 +174,27 @@ function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <ImsLogo size="md" />
-            <button
-              onClick={() => setShowForm(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white text-sm font-semibold rounded-lg hover:bg-slate-800 transition-colors shadow-sm"
-            >
-              <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">Issue Certificate</span>
-              <span className="sm:hidden">Issue</span>
-            </button>
+            <div className="flex items-center gap-3">
+              <span className="hidden sm:inline text-sm text-slate-500 max-w-[200px] truncate">
+                {session.user.email}
+              </span>
+              <button
+                onClick={handleSignOut}
+                className="inline-flex items-center gap-2 px-3 py-2.5 text-slate-600 text-sm font-medium rounded-lg hover:bg-slate-100 transition-colors"
+                title="Sign out"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="hidden sm:inline">Sign Out</span>
+              </button>
+              <button
+                onClick={() => setShowForm(true)}
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white text-sm font-semibold rounded-lg hover:bg-slate-800 transition-colors shadow-sm"
+              >
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline">Issue Certificate</span>
+                <span className="sm:hidden">Issue</span>
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -833,7 +881,6 @@ function VerifyPage({ certificateId, onBack }: { certificateId: string; onBack: 
             <>
               <CheckCircle2 className="w-14 h-14 text-white mx-auto mb-2" />
               <h1 className="text-2xl font-bold text-white">Certificate Verified</h1>
-              <h2>from IMS</h2>
               <p className="text-emerald-50 text-sm mt-1">This certificate is authentic and valid</p>
             </>
           ) : (
