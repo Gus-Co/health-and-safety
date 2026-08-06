@@ -833,6 +833,7 @@ function VerifyPage({ certificateId, onBack }: { certificateId: string; onBack: 
             <>
               <CheckCircle2 className="w-14 h-14 text-white mx-auto mb-2" />
               <h1 className="text-2xl font-bold text-white">Certificate Verified</h1>
+              <h2>from IMS</h2>
               <p className="text-emerald-50 text-sm mt-1">This certificate is authentic and valid</p>
             </>
           ) : (
