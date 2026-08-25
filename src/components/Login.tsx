@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import ImsLogo from '@/components/ImsLogo';
+import Logo from '@/components/Logo';
 import { Lock, Mail, AlertCircle, Loader2, ShieldCheck } from 'lucide-react';
 
 export default function Login() {
@@ -25,13 +25,11 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
-        {/* Logo header */}
         <div className="flex flex-col items-center mb-8">
-          <ImsLogo size="lg" />
+          <Logo size="lg" />
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-          {/* Header band */}
           <div className="bg-gradient-to-r from-slate-900 to-slate-800 px-6 py-6 text-center">
             <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center mx-auto mb-3">
               <ShieldCheck className="w-6 h-6 text-emerald-400" />
@@ -40,7 +38,6 @@ export default function Login() {
             <p className="text-sm text-slate-400 mt-1">Sign in to manage certificates</p>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="px-6 py-6 space-y-5">
             <div>
               <label className="flex items-center gap-1.5 text-sm font-medium text-slate-700 mb-1.5">
@@ -76,7 +73,7 @@ export default function Login() {
 
             {error && (
               <div className="flex items-center gap-2 p-3 bg-rose-50 border border-rose-200 rounded-lg text-sm text-rose-700">
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <AlertCircle className="w-4 h-4 shrink-0" />
                 {error}
               </div>
             )}
@@ -99,7 +96,7 @@ export default function Login() {
         </div>
 
         <p className="text-center text-xs text-slate-400 mt-6">
-          IMS College SA — Certificate Verification System
+          Cert Verify — Certificate Verification System
         </p>
       </div>
     </div>
