@@ -17,6 +17,15 @@ export interface Certificate {
   created_at: string;
 }
 
-export type CertificateInput = Omit<Certificate, 'id' | 'status' | 'created_at' | 'certificate_number'> & {
-  certificate_number?: string;
-};
+export interface ExtractedCertData {
+  student_name: string;
+  id_number: string;
+  course_name: string;
+  course_date: string;
+  expiry_date: string;
+  issuer_name: string;
+  saqa_id: string;
+  nqf_level: string;
+  credits: string;
+  assessor_no: string;
+}

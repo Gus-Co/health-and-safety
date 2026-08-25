@@ -57,7 +57,7 @@ function buildHtml(c: CertPayload): string {
     <tr><td align="center">
       <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
         <tr><td style="background:#0f172a;padding:24px 32px;">
-          <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;">New Certificate Issued</h1>
+          <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;">Cert Verify — New Certificate Issued</h1>
           <p style="margin:4px 0 0;color:#94a3b8;font-size:14px;">A QR code has been generated for the certificate below.</p>
         </td></tr>
         <tr><td style="padding:24px 32px;">
@@ -73,7 +73,7 @@ function buildHtml(c: CertPayload): string {
           <a href="${c.verify_url}" style="display:inline-block;padding:12px 24px;background:#059669;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:600;font-size:14px;">View Certificate</a>
         </td></tr>
         <tr><td style="padding:16px 32px 24px;border-top:1px solid #e2e8f0;">
-          <p style="margin:0;color:#94a3b8;font-size:12px;">This is an automated notification from the IMS College SA certificate system.</p>
+          <p style="margin:0;color:#94a3b8;font-size:12px;">This is an automated notification from Cert Verify.</p>
         </td></tr>
       </table>
     </td></tr>
@@ -110,7 +110,7 @@ Deno.serve(async (req: Request) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: "IMS Certificates <onboarding@resend.dev>",
+          from: "Cert Verify <onboarding@resend.dev>",
           to: ADMIN_EMAILS,
           subject,
           html,
