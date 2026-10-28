@@ -5,6 +5,7 @@ const corsHeaders = {
 };
 
 const ADMIN_EMAIL = "Info@imscollegesa.co.za";
+const SENDER_EMAIL = "Info@imscollegesa.co.za";
 
 interface CertPayload {
   student_name: string;
@@ -108,7 +109,7 @@ Deno.serve(async (req: Request) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: "Cert Verify <onboarding@resend.dev>",
+          from: `Cert Verify <${SENDER_EMAIL}>`,
           to: ADMIN_EMAIL,
           subject,
           html,
