@@ -1,0 +1,2 @@
+[functions.send-cert-email]
+verify_jwt = false

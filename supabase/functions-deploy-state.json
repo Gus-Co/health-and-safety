@@ -1,0 +1,9 @@
+{
+  "projectId": "69577069",
+  "functions": {
+    "send-cert-email": {
+      "hasChanged": false,
+      "hash": "583ff8b8187c41ae51bf78f8993c0e562aea0a6ad8698588e0dbd857271a1dac"
+    }
+  }
+}

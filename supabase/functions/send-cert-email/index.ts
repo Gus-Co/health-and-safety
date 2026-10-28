@@ -1,12 +1,10 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
 };
 
-const ADMIN_EMAILS = ["tshidi.motebs@gmail.com", "Info@imscollegesa.co.za"];
+const ADMIN_EMAIL = "Info@imscollegesa.co.za";
 
 interface CertPayload {
   student_name: string;
@@ -111,7 +109,7 @@ Deno.serve(async (req: Request) => {
         },
         body: JSON.stringify({
           from: "Cert Verify <onboarding@resend.dev>",
-          to: ADMIN_EMAILS,
+          to: ADMIN_EMAIL,
           subject,
           html,
         }),
@@ -127,7 +125,7 @@ Deno.serve(async (req: Request) => {
       }
     } else {
       console.log("RESEND_API_KEY not set — logging notification instead of sending email.");
-      console.log("To:", ADMIN_EMAILS.join(", "));
+      console.log("To:", ADMIN_EMAIL);
       console.log("Subject:", subject);
       console.log("Verify URL:", payload.verify_url);
     }
